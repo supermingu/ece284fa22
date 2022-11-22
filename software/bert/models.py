@@ -99,23 +99,11 @@ class MultiHeadedSelfAttention(nn.Module):
 
 
 
-        ######## Mingu added ########
-        #thres = -1 
-        #scores[scores<thres] = -9999.
-        #---------------------------#
-
 
         if mask is not None:
             mask = mask[:, None, None, :].float()
             scores -= 10000.0 * (1.0 - mask)
 
-
-        ######## Mingu added ########
-        ## mask aware sparsity ##
-        #non_sparsity = (scores > -5000).sum() / (scores.size(1)*scores.size(2)*(mask==1).sum())
-        #sparsity = (1 - non_sparsity)*100
-        #print('mask-aware sparsity:', sparsity)
-        #---------------------------#
 
 
         scores = self.drop(F.softmax(scores, dim=-1))
